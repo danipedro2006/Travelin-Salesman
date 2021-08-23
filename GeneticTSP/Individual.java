@@ -1,21 +1,89 @@
 package tsp;
 
 public class Individual {
-	
+
 	public int chromosome[];
-	private double fitness=-1;
+	private double fitness = -1;
 	
-	public Individual(int[] chromosome, double fitness) {
+
+	// constructor for individual with specific chromosome
+
+	public Individual(int[] chromosome) {
+
 		this.chromosome = chromosome;
 		this.fitness = fitness;
 	}
 
+	// constructor for random individual
+
+	public Individual(int chromosomeLength) {
+
+		// create random individual
+
+		for (int gene = 0; gene < chromosome.length; gene++) {
+
+			chromosome[gene] = gene;
+		}
+
+	// shufle genes
+
+		for (int geneIndex = 0; geneIndex < chromosomeLength; geneIndex++) {
+
+			int newGeneIndex = (int) (Math.random() * chromosomeLength);
+			// swap individuals
+
+			int tempIndividual = chromosome[newGeneIndex];
+			chromosome[newGeneIndex] = chromosome[geneIndex];
+			chromosome[geneIndex] = tempIndividual;
+
+		}
+
+		this.chromosome = chromosome;
+
+	}
+
 	public int[] getChromosome() {
-		return chromosome;
+
+		return this.chromosome;
 	}
 
-	public double getFitness() {
-		return fitness;
+	public int getChromosomeLength() {
+
+		return this.chromosome.length;
+	}
+	
+	
+	// check if gene is contained in this individual
+
+	public boolean containsGene(int gene) {
+
+		for (int i = 0; i < this.getChromosomeLength(); i++) {
+			if (this.getGene(i) == gene) {
+				return true;
+			}
+		}
+
+		return false;
+
 	}
 
+	public int getGene(int offset) {
+
+		return this.chromosome[offset];
+	}
+
+	public void setGene(int gene, int offset) {
+
+		this.chromosome[offset] = gene;
+	}
+
+	public void setFitness(double fitness) {
+
+		this.fitness = fitness;
+	}
+
+	public  double getFitness() {
+
+		return this.fitness;
+	}
 }
