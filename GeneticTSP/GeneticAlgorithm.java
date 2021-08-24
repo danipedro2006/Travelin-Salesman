@@ -1,13 +1,15 @@
 package tsp;
 
-public class GeneticTSP {
+import java.util.Arrays;
+
+public class GeneticAlgorithm {
 	private int populationSize;
 	private double mutationRate;
 	private double crossoverRate;
 	private int tournamentSize;
 	private int elitismCount;
 
-	public GeneticTSP(int population, double mutationRate, double crossoverRate, int tournamentSize, int elitismCount) {
+	public GeneticAlgorithm(int population, double mutationRate, double crossoverRate, int tournamentSize, int elitismCount) {
 		this.populationSize = population;
 		this.mutationRate = mutationRate;
 		this.crossoverRate = crossoverRate;
@@ -131,8 +133,63 @@ public class GeneticTSP {
 					}
 				}
 			}
-			
+			//Add individual to population
 			newPopulation.setIndividual(individual, populationIndex);
+		}
+		//Return mutated population
+		return newPopulation;
+	}
+	
+	public Population orderedCrossover(Population population) {
+		//Create new population
+		Population newPopulation=new Population(population.size());
+		//Loop ove by fitness
+		for(int populationIndex=0;populationIndex<population.size();populationIndex++) {
+			//Get parent1
+			Individual parent1=population.getFittest(populationIndex);
+			//Apply crosssover to this individual
+			if(this.crossoverRate>Math.random() && populationIndex>this.elitismCount) {
+				Individual parent2=this.tournamentSelection(population);
+				//Create blank offspring chromosome
+				int offspringChromosome[]=new int[parent1.getChromosomeLength()];
+				Arrays.fill(offspringChromosome, -1);
+				Individual offspring=new Individual(offspringChromosome);
+				//Get subset of parents chromosomes
+				int substrPos1=(int)(Math.random()*parent1.getChromosomeLength());
+				int substrPos2=(int)(Math.random()*parent1.getChromosomeLength());
+				
+				final int startSubstr=Math.min(substrPos1, substrPos2);
+				final int endSubstr=Math.max(substrPos1, substrPos2);
+				
+				//Loop and add the sub tour from parent1 to our child
+				
+				for(int i=startSubstr;i<endSubstr;i++) {
+					offspring.setGene(parent1.getGene(i), i);
+				}
+				//Loop through parent 2's city tour
+				for(int i=0;i<parent2.getChromosomeLength();i++) {
+					int parent2Gene=i+endSubstr;
+					if(parent2Gene>=parent2.getChromosomeLength()) {
+						parent2Gene-=parent2.getChromosomeLength();
+					}
+					//If offspring doesn't have the city add it
+					if(offspring.containsGene(parent2.getGene(parent2Gene))==false) {
+						//Loop to find a spare position in the child's tour
+						for(int j=0;j<offspring.getChromosomeLength();j++) {
+							//Spare position found, add city
+							if(offspring.getGene(j)==1) {
+								offspring.setGene(parent2.getGene(parent2Gene), j);
+								break;
+							}
+						}
+					}
+				}
+				//Add child
+				newPopulation.setIndividual(offspring, populationIndex);
+			}
+			else {
+				newPopulation.setIndividual(parent1, populationIndex);
+			}
 		}
 		return newPopulation;
 	}

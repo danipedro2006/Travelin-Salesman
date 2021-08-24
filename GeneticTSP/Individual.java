@@ -11,7 +11,7 @@ public class Individual {
 	public Individual(int[] chromosome) {
 
 		this.chromosome = chromosome;
-		this.fitness = fitness;
+		
 	}
 
 	// constructor for random individual
@@ -19,8 +19,9 @@ public class Individual {
 	public Individual(int chromosomeLength) {
 
 		// create random individual
+		int chromosome[]=new int[chromosomeLength];
 
-		for (int gene = 0; gene < chromosome.length; gene++) {
+		for (int gene = 0; gene < chromosomeLength; gene++) {
 
 			chromosome[gene] = gene;
 		}
