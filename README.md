@@ -26,14 +26,12 @@ The Nearest Neighbor Method
 
 This is perhaps the simplest TSP heuristic. The key to this method is to always visit the nearest destination and then go back to the first city when all other cities are visited. To solve the TSP using this method, choose a random city and then look for the closest unvisited city and go there. Once you have visited all cities, you must return to the first city.  
 
-
 ## Screenshot
 <img src= width="400"  height="320">  
 
 ## To do
-- [x] - GUI redesign  
-- [ ] - fix bugs in score.java
-
+- [x] - code refactor  
+- [ ] - add screenshot picture
 
 ## Technologies
 * Java - version 1.8
